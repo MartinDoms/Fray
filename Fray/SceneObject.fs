@@ -29,7 +29,7 @@ open VMath
                 let B = Vector3D.DotProduct(pointToVector invRay.origin, invRay.direction)
                 let C = Vector3D.DotProduct(pointToVector invRay.origin, pointToVector invRay.origin) - 1.0
                 let discr = B*B - A*C
-                if discr < 0.0 then []
+                if discr <= 0.0 then []
                 else 
                     let normalAtTime t = 
                         invRay.atTime t |> pointToVector |> norm
