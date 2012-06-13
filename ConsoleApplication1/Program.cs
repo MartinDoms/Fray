@@ -5,7 +5,6 @@ using System.Text;
 using Fray;
 using System.Windows.Media.Media3D;
 using Microsoft.FSharp.Collections;
-using System.Threading.Tasks;
 
 namespace ConsoleApplication1
 {
@@ -13,8 +12,8 @@ namespace ConsoleApplication1
     {
         static Matrix3D mx1, mx2, mx3, mx4;
         static Fray.Material m1, m2, m3, m4;
-        const int width = 800;
-        const int height = 600;
+        const int width = 1280;
+        const int height = 1024;
         static object bmpLock = new object();
 
         static void Main(string[] args)
@@ -40,13 +39,13 @@ namespace ConsoleApplication1
 
             var bmp = new System.Drawing.Bitmap(width, height);
 
-            Parallel.ForEach(colors, tuple =>
+
+            foreach (var tuple in colors)
             {
                 var c = tuple.Item3;
                 var color = System.Drawing.Color.FromArgb(255, (int)(255 * c.r), (int)(255 * c.g), (int)(255 * c.b));
                 SetPixel(tuple.Item1, tuple.Item2, color, bmp);
-            });
-
+            }
             bmp.Save(@"output.jpg");
         }
 
