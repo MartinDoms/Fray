@@ -1,0 +1,8 @@
+h2. Fray
+
+F# Ray Tracer
+
+Note: there are still some bugs because I had to rewrite a large chunk of this in one night. The renderer and its API will be changing a lot.
+
+Sample image:
+!http://martindoms.com/scratch/fray-sample01.png(Textist)!
