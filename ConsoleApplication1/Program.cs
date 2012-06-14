@@ -12,8 +12,8 @@ namespace ConsoleApplication1
     {
         static Matrix3D mx1, mx2, mx3, mx4;
         static Fray.Material m1, m2, m3, m4;
-        const int width = 1280;
-        const int height = 1024;
+        const int width = 300;
+        const int height = 200;
         static object bmpLock = new object();
 
         static void Main(string[] args)

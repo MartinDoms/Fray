@@ -66,6 +66,7 @@ module Fray =
             let ambient = ambientColorAt intersection
             let specular = specularColorAt intersection hitPoint transNormal
             let diffuse = diffuseColorAt intersection hitPoint transNormal
+
             let primaryColor = ambient + diffuse + specular
 
             if currentReflection = 0 then 
@@ -78,23 +79,26 @@ module Fray =
                 let reflectivity = intersection.material.reflectivity
                 match reflectedIntersection with
                 | None -> primaryColor
-                | _ -> primaryColor + traceColorAt reflectedIntersection.Value newRay  (currentReflection - 1) * reflectivity
+                | _ -> primaryColor + (traceColorAt reflectedIntersection.Value newRay  (currentReflection - 1)) * reflectivity
 
         traceColorAt intersection ray maxReflections   
 
     let perturbRay (ray:Ray) spawnedRays aperture focalDistance =
-        let random = Random()
-        let lookAt = ray.origin + ray.direction * focalDistance // focal length
-        let rayList = []
-        let newRay = (fun () ->
-            let dx = aperture * (float(random.Next(100))-50.0)/50.0
-            let dy = aperture * (float(random.Next(100))-50.0)/50.0
-            let dz = aperture * (float(random.Next(100))-50.0)/50.0
-            let newOrigin = Point3D( ray.origin.X + dx,
-                                     ray.origin.Y + dy,
-                                     ray.origin.Z + dz )
-            Ray(newOrigin, lookAt - newOrigin))
-        List.map (fun x -> newRay()) [0..spawnedRays]
+        match spawnedRays with
+        | 1 -> [ray]
+        | _ -> 
+            let random = Random()
+            let lookAt = ray.origin + ray.direction * focalDistance // focal length
+            let rayList = []
+            let newRay = (fun () ->
+                let dx = aperture * (float(random.Next(100))-50.0)/50.0
+                let dy = aperture * (float(random.Next(100))-50.0)/50.0
+                let dz = aperture * (float(random.Next(100))-50.0)/50.0
+                let newOrigin = Point3D( ray.origin.X + dx,
+                                         ray.origin.Y + dy,
+                                         ray.origin.Z + dz )
+                Ray(newOrigin, lookAt - newOrigin))
+            List.map (fun x -> newRay()) [0..spawnedRays]
 
     let RayTrace width height reflections scene =
         // Vertical and horizontal field of view
@@ -117,7 +121,7 @@ module Fray =
                     let rayPoint = vpc + float(x-width/2)*pw*u + float(y-height/2)*ph*v
                     let rayDir = VMath.norm (rayPoint - scene.camera.position)
                     let ray = Ray(scene.camera.position, direction = rayDir)
-                    let rays = perturbRay ray 24 0.1 7.8
+                    let rays = perturbRay ray 1 0.1 7.8
                     let intersections = castRays rays scene
                     let colors = 
                         intersections |> 

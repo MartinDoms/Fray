@@ -44,7 +44,7 @@ open VMath
                 let t = -Sz/Cz;
                 if t < 0.0 then []
                 else
-                    let normal = Vector3D(0.0,0.0,-1.0)
+                    let normal = Vector3D(0.0,0.0,1.0)
                     [ { normal = normal; point = ray.atTime t; material=material; transformation=transformation; t=t } ]
 
             | BoundPlane (material, transformation) ->
